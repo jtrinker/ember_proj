@@ -21,4 +21,15 @@ App.IndexController = Ember.Controller.extend({
 	}.property()
 });
 
+App.AboutController = Ember.Controller.extend({
+  contactName: "Jamie",
+  avatar: 'images/avatar.png',
+  open: function() {
+    if ((new Date()).getDay() === 0) {
+      return "Sorry, we're closed";
+    }else{
+      return "We're open!";
+    }
+  }.property()
+});
 
