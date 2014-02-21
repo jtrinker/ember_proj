@@ -9,7 +9,24 @@ var App = Ember.Application.create({
 
 App.Router.map(function() {
 	this.route('about', { path: '/aboutus' } );
+	this.resource('products');
+	this.resource('product', { path: '/products/:price' } );
 });
+
+// routes
+
+App.ProductsRoute = Ember.Route.extend({
+	model: function() {
+		return App.PRODUCTS;
+	}
+});
+
+App.ProductRoute = Ember.Route.extend({
+	model: function(params) {
+		console.log(params);
+	}
+});
+
 
 // controllers
 
@@ -32,4 +49,23 @@ App.AboutController = Ember.Controller.extend({
     }
   }.property()
 });
+
+// models
+
+App.PRODUCTS =[
+	{
+		title: "flint",
+		price: 99,
+		description: "Flint is awesome.",
+		isOnSale: true,
+		image: "flint.png"
+	},
+	{
+		title: "Kindling",
+		price: 249,
+		description: "Easily starts fires.",
+		isOnSale: false,
+		image: "kindling.png"
+	}
+];
 

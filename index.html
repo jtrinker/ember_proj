@@ -18,6 +18,7 @@
       <div class="navbar">
         <ul class="nav navbar-nav">
           <li>{{#link-to 'index'}}Home{{/link-to}}</li>
+          <li>{{#link-to 'products'}}Products{{/link-to}}</li>
           <li>{{#link-to 'about'}}About Us{{/link-to}}</li>
         </ul>
       </div><!-- navbar -->
@@ -40,4 +41,16 @@
 <script type="text/x-handlebars" data-template-name="about">
   <h1>About The Flint &amp; Flame!</h1>
   <p>{{open}}</p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="products">
+  <h1>Products</h1>
+  {{#each}}
+    <h2>{{title}}</h2>
+    <p>{{description}}</p>
+  {{/each}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="product">
+
 </script>
