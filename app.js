@@ -1,6 +1,6 @@
 // Ember application object
 
-var App = Ember.Application.create({
+App = Ember.Application.create({
 	LOG_TRANSITIONS: true,
 	LOG_TRANSITIONS_INTERNAL: true
 });
@@ -9,21 +9,22 @@ var App = Ember.Application.create({
 
 App.Router.map(function() {
 	this.route('about', { path: '/aboutus' } );
-	this.resource('products');
-	this.resource('product', { path: '/products/:price' } );
+	this.resource('products', function() {
+		this.resource('product', { path: '/:product_id' } );
+	});
 });
 
 // routes
 
 App.ProductsRoute = Ember.Route.extend({
 	model: function() {
-		return App.PRODUCTS;
+		return this.store.findAll('product');
 	}
 });
 
 App.ProductRoute = Ember.Route.extend({
 	model: function(params) {
-		console.log(params);
+		return this.store.find('product', params.product_id);
 	}
 });
 
@@ -34,7 +35,7 @@ App.IndexController = Ember.Controller.extend({
 	productsCount: 6,
 	logo: 'images/logo.png',
 	time: function() {
-		return (new Date()).toDateString()
+		return (new Date()).toDateString();
 	}.property()
 });
 
@@ -52,8 +53,21 @@ App.AboutController = Ember.Controller.extend({
 
 // models
 
-App.PRODUCTS =[
+App.ApplicationAdapter = DS.FixtureAdapter.extend();
+
+// Product Class
+App.Product = DS.Model.extend({
+	title: DS.attr('string'),
+	description: DS.attr('string'),
+	price: DS.attr('number'),
+	isOnSale: DS.attr('boolean'),
+	image: DS.attr('string')
+});
+
+// Product Instances
+App.Product.FIXTURES = [
 	{
+		id: 1,
 		title: "flint",
 		price: 99,
 		description: "Flint is awesome.",
@@ -61,6 +75,7 @@ App.PRODUCTS =[
 		image: "flint.png"
 	},
 	{
+		id: 2,
 		title: "Kindling",
 		price: 249,
 		description: "Easily starts fires.",
@@ -68,4 +83,5 @@ App.PRODUCTS =[
 		image: "kindling.png"
 	}
 ];
+
 

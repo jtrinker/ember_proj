@@ -6,7 +6,7 @@
     <script src="js/libs/jquery-1.10.2.js"></script>
     <script src="js/libs/handlebars-1.1.2.js"></script>
     <script src="js/libs/ember-1.4.0.js"></script>
-    <script src="js/libs/ember-data.js"></script>
+    <script src="http://builds.emberjs.com.s3.amazonaws.com/beta/ember-data.js"></script>
     <script src="app.js"></script>
 
     <link rel="stylesheet" href="css/normalize.css">
@@ -46,11 +46,17 @@
 <script type="text/x-handlebars" data-template-name="products">
   <h1>Products</h1>
   {{#each}}
-    <h2>{{title}}</h2>
+    <h2>{{#link-to 'product' this}}{{title}}{{/link-to}}</h2>
     <p>{{description}}</p>
   {{/each}}
+  <div>{{outlet}}</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name='products/index'>
+  <h1>Please choose a product!</h1>
 </script>
 
 <script type="text/x-handlebars" data-template-name="product">
-
+  <h1>{{title}}</h1>
+  <p>{{description}}</p>
 </script>
