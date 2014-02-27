@@ -36,6 +36,11 @@
   <h1>Welcome to The Flint &amp; Flame!</h1>
   <p>There are {{productsCount}} products.</p>
   <p>rendered at {{time}}.</p>
+  <h3>On sale:</h3>
+    {{#each onSale}}
+    {{#link-to 'product' this}}{{title}}{{/link-to}}
+    {{/each}}
+  <h5>See all on sale products {{#link-to 'products.onsale'}}here{{/link-to}}!</h5>
 </script>
 
 <script type="text/x-handlebars" data-template-name="about">
@@ -56,7 +61,23 @@
   <h1>Please choose a product!</h1>
 </script>
 
+<script type="text/x-handlebars" data-template-name='products/onsale'>
+  {{#each}}
+    <h2>{{#link-to 'product' this}}{{title}}{{/link-to}}</h2>
+    <p>{{description}}</p>
+    <p>By for ${{price}}</p>
+  {{/each}}
+</script>
+
 <script type="text/x-handlebars" data-template-name="product">
   <h1>{{title}}</h1>
   <p>{{description}}</p>
+  <h3>Reviews</h3>
+  <ul>
+    {{#each reviews}}
+      <li>{{text}}</li>
+    {{else}}
+      <p>No reviews yet! Be the first to write one.</p>
+    {{/each}}
+  </ul>
 </script>

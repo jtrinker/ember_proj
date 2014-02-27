@@ -11,10 +11,17 @@ App.Router.map(function() {
 	this.route('about', { path: '/aboutus' } );
 	this.resource('products', function() {
 		this.resource('product', { path: '/:product_id' } );
+		this.route('onsale');
 	});
 });
 
 // routes
+
+App.IndexRoute = Ember.Route.extend({
+	model: function() {
+		return this.store.findAll('product');
+	}
+});
 
 App.ProductsRoute = Ember.Route.extend({
 	model: function() {
@@ -28,15 +35,24 @@ App.ProductRoute = Ember.Route.extend({
 	}
 });
 
+App.ProductsOnsaleRoute = Ember.Route.extend({
+	model: function() {
+		return this.modelFor('products').filterBy('isOnSale');
+	}
+});
+
 
 // controllers
 
-App.IndexController = Ember.Controller.extend({
-	productsCount: 6,
+App.IndexController = Ember.ArrayController.extend({
+	productsCount: Ember.computed.alias('length'),
 	logo: 'images/logo.png',
 	time: function() {
 		return (new Date()).toDateString();
-	}.property()
+	}.property(),
+	onSale: function() {
+		return this.filterBy('isOnSale').slice(0, 3);
+	}.property('@each.isOnSale')
 });
 
 App.AboutController = Ember.Controller.extend({
@@ -51,6 +67,10 @@ App.AboutController = Ember.Controller.extend({
   }.property()
 });
 
+App.ProductsController = Ember.ArrayController.extend({
+	sortProperties: ['title']
+});
+
 // models
 
 App.ApplicationAdapter = DS.FixtureAdapter.extend();
@@ -61,14 +81,21 @@ App.Product = DS.Model.extend({
 	description: DS.attr('string'),
 	price: DS.attr('number'),
 	isOnSale: DS.attr('boolean'),
-	image: DS.attr('string')
+	image: DS.attr('string'),
+	reviews: DS.hasMany('review', {async: true})
+});
+
+App.Review = DS.Model.extend({
+	text: DS.attr('string'),
+	reviewedAt: DS.attr('date'),
+	product: DS.belongsTo('product')
 });
 
 // Product Instances
 App.Product.FIXTURES = [
 	{
 		id: 1,
-		title: "flint",
+		title: "Flint",
 		price: 99,
 		description: "Flint is awesome.",
 		isOnSale: true,
@@ -80,8 +107,46 @@ App.Product.FIXTURES = [
 		price: 249,
 		description: "Easily starts fires.",
 		isOnSale: false,
-		image: "kindling.png"
-	}
+		image: "kindling.png",
+		reviews: [1,2]
+	},
+	{
+		id: 3,
+		title: "Sparky",
+		price: 99,
+		description: "Sparky is awesome.",
+		isOnSale: true,
+		image: "flint.png"
+	},
+	{
+		id: 4,
+		title: "Wood",
+		price: 99,
+		description: "Wood is awesome.",
+		isOnSale: true,
+		image: "flint.png"
+	},
+	{
+		id: 5,
+		title: "Matches",
+		price: 99,
+		description: "Matches burn.",
+		isOnSale: true,
+		image: "flint.png"
+	},
 ];
+
+App.Review.FIXTURES = [
+	{
+		id: 1,
+		product: 2,
+		text: "Awesome!"
+	},
+	{
+		id: 2,
+		product: 2,
+		text: "Terrible!"
+	}
+]
 
 
