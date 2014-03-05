@@ -72,12 +72,24 @@
 <script type="text/x-handlebars" data-template-name="product">
   <h1>{{title}}</h1>
   <p>{{description}}</p>
-  <h3>Reviews</h3>
-  <ul>
-    {{#each reviews}}
-      <li>{{text}}</li>
-    {{else}}
-      <p>No reviews yet! Be the first to write one.</p>
-    {{/each}}
-  </ul>
+  {{render 'reviews' reviews}}
+        <div class='new-review'>
+          <h3>Review {{title}}</h3>
+          {{#if text}}
+            <p class='text-muted'>{{text}}</p>
+          {{/if}}
+          {{textarea valueBinding='text'}}
+          <button {{action 'createReview'}}>Review</button>
+        </div>
 </script>
+
+<script type='text/x-handlebars' data-template-name='reviews'>
+    <h3>Reviews</h3>
+    <ul>
+      {{#each}}
+        <li><p>{{text}}</p></li>
+      {{else}}
+        <li><p class='text-muted'><em>No reviews yet. Be the first to write one!</em></p></li>
+      {{/each}}
+    </ul>
+  </script>

@@ -71,6 +71,38 @@ App.ProductsController = Ember.ArrayController.extend({
 	sortProperties: ['title']
 });
 
+App.ProductController = Ember.ObjectController.extend({
+  text: '',
+  actions: {
+    createReview: function () {
+      var review = this.store.createRecord('review', {
+        text: this.get('text'),
+        product: this.get('model'),
+        reviewedAt: new Date()
+      });
+      var controller = this;
+      review.save().then(function(review) {
+        controller.set('text', ''),
+        controller.get('model.reviews').addObject(review)
+      });
+    }
+  }
+});
+
+App.ReviewsController = Ember.ArrayController.extend({
+  sortProperties: ['reviewedAt'],
+  sortAscending: false
+});
+
+// components
+
+App.ProductDetailsComponent = Ember.Component.extend({
+	reviewsCount: Ember.computed.alias('product.reviews.length'),
+	hasReviews: function() {
+		return this.get('reviewsCount') > 0;
+	}.property('reviewsCount')
+});
+
 // models
 
 App.ApplicationAdapter = DS.FixtureAdapter.extend();
